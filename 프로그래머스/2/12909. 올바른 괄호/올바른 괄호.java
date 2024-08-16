@@ -1,22 +1,18 @@
 class Solution {
+    static boolean solution(String s) {
+        boolean answer = false;
+        String[] sarr = s.split("");
+        int leftCount = 0;
+        int rightCount = 0;
+        for(int i = 0; i < sarr.length; i++) {
 
-    boolean solution(String s) {
-        int openCount = 0;
-        int closeCount = 0;
+            if(sarr[i].equals("(")) leftCount++;
+            else if(sarr[i].equals(")")) rightCount++;
+            if(rightCount > leftCount) return false;
+        }
 
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '(') {
-                openCount++;
-            } else if (s.charAt(i) == ')') {
-                closeCount++;
-            }
-            if (openCount < closeCount) {
-                return false;
-            }
-        }
-        if (openCount == closeCount) {
-            return true;
-        }
-        return false;
+        if(leftCount == rightCount) return true;
+
+        return answer;
     }
 }
