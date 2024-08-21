@@ -38,7 +38,7 @@ public class Main {
                 for(int k = 0; k < height; k++) {
                     if(map[j][k] == 1 && !visit[j][k]) {
                         bugCount++;
-                        bfs(j, k);
+                        dfs(j, k);
                     }
                 }
             }
@@ -46,14 +46,14 @@ public class Main {
         }
     }
 
-    private static void bfs(int width, int height) {
+    private static void dfs(int width, int height) {
 
         visit[width][height] = true;
 
         for(int i = 0; i < dx.length; i++) {
             try {
                 if(!visit[width-dx[i]][height-dy[i]] && map[width-dx[i]][height-dy[i]] == 1) {
-                    bfs(width-dx[i], height-dy[i]);
+                    dfs(width-dx[i], height-dy[i]);
                 }
             } catch (Exception e) {
                 String str = "IndexOutOfRange";
