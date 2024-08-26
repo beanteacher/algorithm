@@ -1,46 +1,67 @@
-/*
-2 1 -> (보석의 개수 2, 가방의 개수 1) 
-5 10 (보석의 무게 5, 보석의 가격 10)
-100 100 (보석의 무게 100, 보석의 가격 100)
-11 (가방 별 최대 무게 11)
-*/
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    //보석 관련 정보 클래스
+    static class jewel implements Comparable<jewel> {
+        int value, weight;	//가치 및 무게
+        //생성자
+        public jewel(int value, int weight){
+            this.value = value;
+            this.weight = weight;
+        }
+        //보석 클래스 정렬 관련
+        @Override
+        public int compareTo(jewel o) {
+            if(this.weight == o.weight)		//무게가 같을 때 가치 내림차순
+                return o.value - this.value;
+            return this.weight - o.weight;	//무게 오름차순
+        }
+    }
+    static int N,K;
+    static long answer = 0;
+    static int[] bag;	//가방 무게 저장 배열
+    static jewel[] jewels;	//보석 저장 배열
+    public static void main(String[] args) throws IOException {
+        //입력값 처리하는 BufferedReader
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String crystalBagCount = br.readLine();
-        int crystalCount = Integer.parseInt(crystalBagCount.split(" ")[0]);
-        int bagCount = Integer.parseInt(crystalBagCount.split(" ")[1]);
-
-        int[][] crystalArr = new int[crystalCount][2];
-        for(int i = 0; i < crystalCount; i++) {
-            String crystalInfo = br.readLine();
-            int crystalWeight = Integer.parseInt(crystalInfo.split(" ")[0]);
-            int crystalPrice = Integer.parseInt(crystalInfo.split(" ")[1]);
-            crystalArr[i][0] = crystalWeight;
-            crystalArr[i][1] = crystalPrice;
+        //결과값 출력하는 BufferedWriter
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine()," ");
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        bag = new int[K];
+        jewels = new jewel[N];
+        //보석 입력값 저장
+        for(int i=0;i<N;i++){
+            st = new StringTokenizer(br.readLine()," ");
+            int M = Integer.parseInt(st.nextToken());
+            int V = Integer.parseInt(st.nextToken());
+            jewels[i] = new jewel(V, M);
         }
-
-        int crystalWeightSum = 0;
-
-        for(int i = 0; i < bagCount; i++) {
-            PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a,b) -> b-a);
-            int bagMaxWeight = Integer.parseInt(br.readLine());
-            
-            for(int j = 0; j < crystalArr.length; j++) {
-                if(bagMaxWeight > crystalArr[j][0]) {
-                    maxHeap.offer(crystalArr[j][1]);
-                }
-            }
-
-            if(!maxHeap.isEmpty()) {
-                crystalWeightSum += maxHeap.poll();
-            }
+        //가방 입력값 저장
+        for(int i=0;i<K;i++){
+            int C = Integer.parseInt(br.readLine());
+            bag[i] = C;
         }
-
-        System.out.println(crystalWeightSum);
+        Arrays.sort(bag);	//가방 오름차순 정렬
+        Arrays.sort(jewels);	//보석 정렬
+        //PriorityQueue 생성 및 내림차순 정렬로 설정
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
+        //가방 무게가 낮은 것부터 탐색.
+        for(int i=0,j=0;i<K;i++){
+            while(j<N){
+                if(bag[i] < jewels[j].weight)	//다음 보석부터 가방의 무게보다 클 때
+                    break;
+                pq.add(jewels[j++].value);	//가방에 보석을 넣을 수 있을 때
+            }
+            //넣을 수 있는 보석이 있을 때 가장 가치가 높은 것 넣기
+            if(!pq.isEmpty())
+                answer += pq.poll();
+        }
+        bw.write(answer + "");		//가치의 합 BufferedWriter 저장
+        bw.flush();		//결과 출력
+        bw.close();
+        br.close();
     }
 }
