@@ -28,12 +28,12 @@ public class Main {
             int element = leftStack.pop();
             if(h != element) {
                 isYn = false;
-                break;
+                // break; break하면 0.1초 더 빨라짐
             }
             rightStack.push(element);
         }
 
-        // System.out.println(rightStack);
+        // System.out.println(rightStack); 수열 만들어졌는 지 확인
         if(isYn) {
             for(String s : list) {
                 System.out.println(s);
