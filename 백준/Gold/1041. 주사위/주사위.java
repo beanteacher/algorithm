@@ -1,64 +1,56 @@
+import java.util.*;
 import java.io.*;
-import java.util.Arrays;
 
 public class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
 
-	static long N;
-	static int[] arr = new int[6];
-	static long[] num = new long[4];
-	static long res;
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-	public static void main(String[] args) throws Exception {
+        int[] abcdef = new int[6];
+        for(int i = 0; i < 6; i++) {
+            abcdef[i] = Integer.parseInt(st.nextToken());
+        }
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int twoMin = 0;
 
-		N = Integer.parseInt(br.readLine());
+        int ab = abcdef[0] + abcdef[1];
+        int ac = abcdef[0] + abcdef[2];
+        int ad = abcdef[0] + abcdef[3];
+        int ae = abcdef[0] + abcdef[4];
+        int bc = abcdef[1] + abcdef[2];
+        int bd = abcdef[1] + abcdef[3];
+        int bf = abcdef[1] + abcdef[5];
+        int ce = abcdef[2] + abcdef[4];
+        int cf = abcdef[2] + abcdef[5];
+        int de = abcdef[3] + abcdef[4];
+        int df = abcdef[3] + abcdef[5];
+        int ef = abcdef[4] + abcdef[5];
 
-		num[1] = 5 * (N - 2) * (N - 2) + 4 * (N - 2);
-		num[2] = 8 * (N - 2) + 4;
-		num[3] = 4;
+        twoMin = Math.min(twoMin, ab);
+        twoMin = Math.min(twoMin, ac);
+        twoMin = Math.min(twoMin, ad);
+        twoMin = Math.min(twoMin, ae);
+        twoMin = Math.min(twoMin, bc);
+        twoMin = Math.min(twoMin, bd);
+        twoMin = Math.min(twoMin, bf);
+        twoMin = Math.min(twoMin, ce);
+        twoMin = Math.min(twoMin, cf);
+        twoMin = Math.min(twoMin, de);
+        twoMin = Math.min(twoMin, df);
+        twoMin = Math.min(twoMin, ef);
 
-		String[] sarr = br.readLine().split(" ");
-		for (int i = 0; i < 6; i++)
-			arr[i] = Integer.parseInt(sarr[i]);
+        Arrays.sort(abcdef);
+        int oneMin = abcdef[0];
+        int threeMin = abcdef[0]+abcdef[1]+abcdef[2];
 
-		if (N == 1) {
-			Arrays.sort(arr);
-			int sum = 0;
-			for (int i = 0; i < 5; i++) {
-				sum += arr[i];
-			}
-			bw.write(sum + "\n");
-		}
-
-		else {
-			long min = arr[0];
-			for (int i = 1; i < 6; i++) {
-				min = Math.min(min, arr[i]);
-			}
-			res += num[1] * min;
-
-			min = Long.MAX_VALUE;
-			for (int i = 0; i < 6; i++) {
-				for (int j = i + 1; j < 6; j++) {
-					if (j + i != 5) {
-						min = Math.min(min, arr[i] + arr[j]);
-					}
-				}
-			}
-			res += num[2] * min;
-
-			int sum = 0;
-			for (int i = 0; i < 3; i++) {
-				sum += Math.min(arr[i], arr[5 - i]);
-			}
-			res += num[3] * sum;
-
-			bw.write(res + "\n");
-		}
-		bw.flush();
-
-	}
-
+        int result = 0;
+        result += 4*threeMin;
+        // result += (4*(n-2) + 4*(n-1))*twoMin;
+        result += (8*(n-2) + 4)*twoMin;
+        // result += ((n-2)*(n-2) + 4*(n-2)*(n-1))*oneMin;
+        result += (5*(n-2)^2 + 4*(n-2))*oneMin;
+        System.out.println(result);
+    }
 }
