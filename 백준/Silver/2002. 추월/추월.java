@@ -12,16 +12,16 @@ public class Main {
             map.put(br.readLine(), i);
         }
 
-        List<Integer> list = new ArrayList<>();
+        int[] arr = new int[n];
         for(int i = 0; i < n; i++) {
-            list.add(map.get(br.readLine()));
+            arr[i] = map.get(br.readLine());
         }
 
         int result = 0;
         // 출차 순서 기준으로 해당 차의 순서가 뒷 차보다 빨리 나왔으면 추월
         for(int i = 0; i < n; i++) {
             for(int j = i+1; j < n; j++) {
-                if(list.get(i) > list.get(j)) {
+                if(arr[i] > arr[j]) {
                     result++;
                     break; // 추월 했음을 증명하면 됐으므로 break
                 }
