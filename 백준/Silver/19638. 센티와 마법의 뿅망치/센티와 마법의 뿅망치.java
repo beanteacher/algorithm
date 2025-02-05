@@ -12,30 +12,33 @@ public class Main {
         int t = Integer.parseInt(st.nextToken());
 
         PriorityQueue<Integer> heap = new PriorityQueue<>((a,b) -> b - a);
-        
         for(int i = 0; i < n; i++) {
             heap.offer(Integer.parseInt(br.readLine()));
         }
-        
 
-				int hitCount = 0;
         for(int i = 0; i < t; i++) {
-        
-            // 거인이 centi보다 작거나 1이면 끝내기
-            if((heap.peek() < centiHeight) || (heap.peek() == 1)) {
-		            break;
+            // centi보다 작아지면 끝내기
+            if(heap.peek() < centiHeight) {
+                System.out.println("YES");
+                System.out.println(i);
+                
+                return;
             }
-            
-            heap.offer(heap.poll() / 2);
-            hitCount++;
+            // MaxHeap에서 가장 큰 값이 1이 아니면 때린다.
+            if(heap.peek() == 1) {
+                t = i;
+                break;
+            } else {
+                heap.offer(heap.poll() / 2);
+            }
         }
 
         if(heap.peek() >= centiHeight) {
             System.out.println("NO");
-            System.out.println(heap.peek());
+            System.out.println(heap.poll());
         } else {
             System.out.println("YES");
-            System.out.println(hitCount);
+            System.out.println(t);
         }
     }
 }
