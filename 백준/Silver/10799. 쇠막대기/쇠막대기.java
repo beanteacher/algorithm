@@ -13,16 +13,15 @@ public class Main {
             if(str.charAt(i) == '(') {
                 stack.push("(");
             } else {
+                stack.pop();
+
                 if(str.charAt(i - 1) == '(') {
-                    stack.pop();
                     result += stack.size();
                 } else {
-                    stack.pop();
                     result++;
                 }
             }
         }
-
         System.out.println(result);
     }
 }
