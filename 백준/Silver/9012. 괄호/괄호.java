@@ -1,36 +1,37 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int count = Integer.parseInt(br.readLine());
-
-        Stack<String> stack = new Stack<>();
-
-        for(int k = 0; k < count; k++) {
-            String answer = "";
-            String input = br.readLine();
-            String[] inputArr = input.split("");
-
-            for(int i = 0; i < inputArr.length; i++) {
-                try {
-                    if(inputArr[i].equals("(")) {
-                        stack.push(inputArr[i]);
-                    } else {
-                        stack.pop();
-                    }
-                } catch (Exception e) {
-                    answer = "NO";
+        int n = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i = 0; i < n; i++) {
+            String str = br.readLine();
+            Stack<String> stack = new Stack<>();
+            boolean isVPS = true;
+            for(int j = 0; j < str.length(); j++) {
+                if(stack.isEmpty() && str.charAt(j) == ')') {
+                    isVPS = false;
                     break;
                 }
+
+                if(str.charAt(j) == '(') {
+                    stack.push("(");
+                } else {
+                    stack.pop();
+                }
             }
-            if(answer.equals("NO") || !stack.isEmpty()) {
-                System.out.println("NO");
-                stack.clear();
-                continue;
+
+            if(!stack.isEmpty()) isVPS = false;
+            
+            if(isVPS) {
+                sb.append("YES").append("\n");
+            } else {
+                sb.append("NO").append("\n");
             }
-            System.out.println("YES");
         }
+        System.out.println(sb);
     }
 }
