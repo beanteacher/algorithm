@@ -7,8 +7,9 @@ public class Main {
 
     static void dfs(int start) {
         if(!visited[start]) {
+            visited[start] = true;
+            
             for(int neighbor : arr[start]) {
-                visited[start] = true;
                 dfs(neighbor);
             }
         }
