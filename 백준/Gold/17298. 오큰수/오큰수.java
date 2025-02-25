@@ -4,37 +4,37 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         int n = Integer.parseInt(br.readLine());
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         int[] arr = new int[n];
-        int[] ngeArr = new int[n]; // 결과 배열
-        Stack<Integer> stack = new Stack<>();
-
-        for (int i = 0; i < n; i++) {
+        for(int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        // 배열의 뒤쪽부터 처리
-        for (int i = n - 1; i >= 0; i--) {
-            // 스택의 맨 위 값이 현재 값보다 작거나 같으면 제거
-            while (!stack.isEmpty() && stack.peek() <= arr[i]) {
+        // 자신의 값보다 크면서 가장 왼쪽에 있을 값을 담을 stack
+        Stack<Integer> stack = new Stack<>();
+        int[] resultArr = new int[n];
+        for(int i = arr.length-1; i >= 0; i--) {
+            // arr[i]보다 stack에서 큰 값이 나올 때까지 stack.pop()
+            while(!stack.isEmpty() && arr[i] >= stack.peek()) {
                 stack.pop();
             }
-
-            // 스택이 비어 있으면 NGE가 없으므로 -1, 그렇지 않으면 스택의 맨 위 값이 NGE
-            ngeArr[i] = stack.isEmpty() ? -1 : stack.peek();
-
-            // 현재 값을 스택에 추가
+            // stack이 비지 않았으면 arr[i]보다 큰 값 중 가장 왼쪽에 있는 값이 들어있으므로 해당 값 출력
+            if(!stack.isEmpty()) {
+                resultArr[i] = stack.peek();
+            } else { // stack이 비었다면 arr[i]보다 큰 값이 없으므로 -1 출력
+                resultArr[i] = -1;
+            }
+            // stack에 다음 순서의 왼쪽에 있는 값 표현을 위해 arr[i] 추가
             stack.push(arr[i]);
         }
 
-        // 결과 출력
         StringBuilder sb = new StringBuilder();
-        for (int num : ngeArr) {
-            sb.append(num).append(" ");
+        for(int i = 0; i < n; i++) {
+            sb.append(resultArr[i]).append(" ");
         }
-        System.out.println(sb.toString().trim());
+
+        System.out.println(sb);
     }
 }

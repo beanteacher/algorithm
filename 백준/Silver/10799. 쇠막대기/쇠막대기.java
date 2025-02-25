@@ -4,26 +4,24 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String input = br.readLine();
-        String[] inputArr = input.split("");
-        
+        String str = br.readLine();
+
+        int result = 0;
         Stack<String> stack = new Stack<>();
-        
-        int pipe = 0;
-        
-        for(int i = 0; i < inputArr.length; i++) {
-            if(inputArr[i].equals("(")) {
-                stack.push(inputArr[i]);
+
+        for(int i = 0; i < str.length(); i++) {
+            if(str.charAt(i) == '(') {
+                stack.push("(");
             } else {
-                stack.pop();  
-                
-                if(inputArr[i-1].equals("(")) {
-                    pipe += stack.size();
+                stack.pop();
+
+                if(str.charAt(i - 1) == '(') {
+                    result += stack.size();
                 } else {
-                    pipe++;
+                    result++;
                 }
             }
         }
-        System.out.println(pipe);
+        System.out.println(result);
     }
 }

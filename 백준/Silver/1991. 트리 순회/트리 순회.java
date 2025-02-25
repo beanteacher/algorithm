@@ -1,11 +1,11 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
     static class Node {
         String data;
-        Node leftNode;
-        Node rightNode;
+        Node left;
+        Node right;
 
         public Node(String data) {
             this.data = data;
@@ -15,97 +15,95 @@ public class Main {
     static class Tree {
         Node root;
 
-        public void add(String parent, String left, String right) {
+        public void createTree(String parent, String leftChild, String rightChild) {
+            // root가 null인 경우 트리가 처음 생성된 경우이므로 root의 값을 채워준다.
             if(root == null) {
                 root = new Node(parent);
-
-                if(!left.equals(".")) {
-                    root.leftNode = new Node(left);
+                if(!leftChild.equals(".")) {
+                    root.left = new Node(leftChild);
                 }
-
-                if(!right.equals(".")) {
-                    root.rightNode = new Node(right);
+                if(!rightChild.equals(".")) {
+                    root.right = new Node(rightChild);
                 }
             } else {
-                fillNode(root, parent, left, right);
+                // root가 null이 아닌 경우 자식들을 채워준다.
+                fillTree(root, parent, leftChild, rightChild);
             }
         }
 
-        private void fillNode(Node root, String parent, String left, String right) {
-            if(root == null) {
-                return;
-            } else if(root.data.equals(parent)) {
+        private void fillTree(Node root, String parent, String leftChild, String rightChild) {
+            if (root == null) return;
 
-                if(!left.equals(".")) {
-                    root.leftNode = new Node(left);
+            // root의 data가 parent값과 같다면 자식들을 생성
+            if(root.data.equals(parent)) {
+                if(!leftChild.equals(".")) {
+                    root.left = new Node(leftChild);
                 }
-
-                if(!right.equals(".")) {
-                    root.rightNode = new Node(right);
+                if(!rightChild.equals(".")) {
+                    root.right = new Node(rightChild);
                 }
             } else {
-                fillNode(root.leftNode, parent, left, right);
-                fillNode(root.rightNode, parent, left, right);
-            }
-        }
-        
-        // 전위 순회 부모노드 -> 왼쪽노드 -> 오른쪽노드
-        public void preOrder(Node node) {
-            System.out.print(node.data);
-            if(node.leftNode != null) {
-                preOrder(node.leftNode);
-            }
-            if(node.rightNode != null) {
-                preOrder(node.rightNode);
-            }
-        }
-        
-        //  중위 순회 왼쪽노드 -> 부모노드 -> 오른쪽노드
-        public void inOrder(Node node) {
-
-            if(node.leftNode != null) {
-                inOrder(node.leftNode);
-            }
-            System.out.print(node.data);
-            if(node.rightNode != null) {
-                inOrder(node.rightNode);
+                // root의 data와 같지 않다면 왼쪽부터 재귀
+                fillTree(root.left, parent, leftChild, rightChild);
+                // 왼쪽에도 일치하는 값이 없다면 오른쪽 재귀
+                fillTree(root.right, parent, leftChild, rightChild);
             }
         }
 
-        //  후위 순회 왼쪽노드 -> 오른쪽노드 -> 부모노드
-        public void postOrder(Node node) {
+        // 전위 순회 : root - left - right
+        public void preOrder(Node root) {
+            System.out.print(root.data);
+            if(root.left != null) {
+                preOrder(root.left);
+            }
+            if(root.right != null) {
+                preOrder(root.right);
+            }
+        }
 
-            if(node.leftNode != null) {
-                postOrder(node.leftNode);
+        // 중위 순회 : left - root - right
+        public void inOrder(Node root) {
+            if(root.left != null) {
+                inOrder(root.left);
             }
-            if(node.rightNode != null) {
-                postOrder(node.rightNode);
+            System.out.print(root.data);
+            if(root.right != null) {
+                inOrder(root.right);
             }
-            System.out.print(node.data);
+        }
+
+        // 후위 순회 : left - right - root
+        public void postOrder(Node root) {
+            if(root.left != null) {
+                postOrder(root.left);
+            }
+            if(root.right != null) {
+                postOrder(root.right);
+            }
+            System.out.print(root.data);
         }
     }
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int n = Integer.parseInt(br.readLine());
 
         Tree tree = new Tree();
+
         for(int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-
             String parent = st.nextToken();
-            String left = st.nextToken();
-            String right = st.nextToken();
+            String leftChild = st.nextToken();
+            String rightChild = st.nextToken();
 
-            tree.add(parent, left, right);
+            // 트리 생성
+            tree.createTree(parent, leftChild, rightChild);
         }
-
         tree.preOrder(tree.root);
         System.out.println();
-        
         tree.inOrder(tree.root);
         System.out.println();
-        
         tree.postOrder(tree.root);
     }
 }
