@@ -11,10 +11,6 @@ public class Main {
             isFive = true;
             return;
         }
-        if(adjList.get(start) == null) {
-            return;
-        }
-        
         visited[start] = true;
         for(int neighbor : adjList.get(start)) {
             if(!visited[neighbor]) {
@@ -32,22 +28,22 @@ public class Main {
 
         visited = new boolean[n];
 
+        for(int i = 0; i < n; i++) {
+            adjList.put(i, new ArrayList<>());
+        }
+
         for(int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int friend1 = Integer.parseInt(st.nextToken());
             int friend2 = Integer.parseInt(st.nextToken());
 
-            List<Integer> list1 = adjList.getOrDefault(friend1, new ArrayList<>());
-            List<Integer> list2 = adjList.getOrDefault(friend2, new ArrayList<>());
-            list1.add(friend2);
-            list2.add(friend1);
-            adjList.put(friend1, list1);
-            adjList.put(friend2, list2);
+            adjList.get(friend1).add(friend2);
+            adjList.get(friend2).add(friend1);
         }
 
         for(int i = 0; i < n; i++) {
             dfs(i, 1);
-            if(isFive) { // 친구관계가 5단계까지 이어져 있는 사람이 있다면 1 출력
+            if(isFive) {
                 System.out.println(1);
                 return;
             }
