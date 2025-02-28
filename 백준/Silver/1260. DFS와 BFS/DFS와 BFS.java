@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
     static StringBuilder dfsSb = new StringBuilder();
-    static void dfs(int start) {
+    static void dfs(int start) { // 재귀
         if(!dfsVisited[start]) {
             dfsSb.append(start).append(" ");
             dfsVisited[start] = true;
@@ -13,7 +13,7 @@ public class Main {
         }
     }
     static StringBuilder bfsSb = new StringBuilder();
-    static void bfs() {
+    static void bfs() { // while문
         while(!queue.isEmpty()) {
             int node = queue.poll();
             bfsSb.append(node).append(" ");
@@ -27,10 +27,10 @@ public class Main {
         }
     }
 
-    static Map<Integer, List<Integer>> adjList = new HashMap<>();;
-    static boolean[] dfsVisited;
-    static boolean[] bfsVisited;
-    static Queue<Integer> queue = new LinkedList<>();
+    static Map<Integer, List<Integer>> adjList = new HashMap<>(); // 인접리스트 구현
+    static boolean[] dfsVisited; // dfs 방문 배열
+    static boolean[] bfsVisited; // bfs 방문 배열
+    static Queue<Integer> queue = new LinkedList<>(); // bfs를 위한 queue
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -41,7 +41,7 @@ public class Main {
         int v = Integer.parseInt(st.nextToken());
 
         for(int i = 0; i < n+1; i++) {
-            adjList.put(i, new ArrayList<>());
+            adjList.put(i, new ArrayList<>()); // 인접리스트 초기화
         }
         dfsVisited = new boolean[n+1];
         bfsVisited = new boolean[n+1];
@@ -54,11 +54,12 @@ public class Main {
             adjList.get(node2).add(node1);
         }
         for(Map.Entry<Integer, List<Integer>> entry : adjList.entrySet()) {
-            Collections.sort(entry.getValue());
+            Collections.sort(entry.getValue()); // 결과는 노드를 작은 순으로 원하기 때문에 각각의 리스트를 오름차순으로 정렬해준다.
         }
-
+        // dfs 탐색 시작
         dfs(v);
-        queue.offer(v);
+        // bfs 탐색 시작
+        queue.offer(v); // 초깃값 설정
         bfs();
 
         System.out.println(dfsSb);
