@@ -1,67 +1,50 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    //보석 관련 정보 클래스
-    static class jewel implements Comparable<jewel> {
-        int value, weight;	//가치 및 무게
-        //생성자
-        public jewel(int value, int weight){
-            this.value = value;
+    static class Jewelry {
+        int weight;
+        int value;
+
+        public Jewelry(int weight, int value) {
             this.weight = weight;
-        }
-        //보석 클래스 정렬 관련
-        @Override
-        public int compareTo(jewel o) {
-            if(this.weight == o.weight)		//무게가 같을 때 가치 내림차순
-                return o.value - this.value;
-            return this.weight - o.weight;	//무게 오름차순
+            this.value = value;
         }
     }
-    static int N,K;
-    static long answer = 0;
-    static int[] bag;	//가방 무게 저장 배열
-    static jewel[] jewels;	//보석 저장 배열
-    public static void main(String[] args) throws IOException {
-        //입력값 처리하는 BufferedReader
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        //결과값 출력하는 BufferedWriter
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine()," ");
-        N = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
-        bag = new int[K];
-        jewels = new jewel[N];
-        //보석 입력값 저장
-        for(int i=0;i<N;i++){
-            st = new StringTokenizer(br.readLine()," ");
-            int M = Integer.parseInt(st.nextToken());
-            int V = Integer.parseInt(st.nextToken());
-            jewels[i] = new jewel(V, M);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+        PriorityQueue<Jewelry> jewelryHeap = new PriorityQueue<>((j1, j2) -> j1.weight == j2.weight ? j1.value - j2.value : j1.weight - j2.weight);
+
+        for(int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+
+            int m = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            // 11보다 작은 무게를 가진 보석 중 가장 비싼 것.
+            jewelryHeap.offer(new Jewelry(m, v));
         }
-        //가방 입력값 저장
-        for(int i=0;i<K;i++){
-            int C = Integer.parseInt(br.readLine());
-            bag[i] = C;
+
+        int[] arr = new int[k];
+        for(int i = 0; i < k; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
         }
-        Arrays.sort(bag);	//가방 오름차순 정렬
-        Arrays.sort(jewels);	//보석 정렬
-        //PriorityQueue 생성 및 내림차순 정렬로 설정
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
-        //가방 무게가 낮은 것부터 탐색.
-        for(int i=0,j=0;i<K;i++){
-            while(j<N){
-                if(bag[i] < jewels[j].weight)	//다음 보석부터 가방의 무게보다 클 때
-                    break;
-                pq.add(jewels[j++].value);	//가방에 보석을 넣을 수 있을 때
+        Arrays.sort(arr);
+
+        long result = 0;
+        PriorityQueue<Jewelry> jewelryValueHeap = new PriorityQueue<>((j1, j2) -> j2.value - j1.value);
+        for(int i = 0; i < k; i++) {
+            while(!jewelryHeap.isEmpty() && arr[i] >= jewelryHeap.peek().weight) { // 11 > 5
+                jewelryValueHeap.offer(jewelryHeap.poll());
             }
-            //넣을 수 있는 보석이 있을 때 가장 가치가 높은 것 넣기
-            if(!pq.isEmpty())
-                answer += pq.poll();
+
+            result += !jewelryValueHeap.isEmpty() ? jewelryValueHeap.poll().value : 0;
         }
-        bw.write(answer + "");		//가치의 합 BufferedWriter 저장
-        bw.flush();		//결과 출력
-        bw.close();
-        br.close();
+
+        System.out.println(result);
     }
 }
