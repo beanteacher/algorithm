@@ -18,7 +18,7 @@ public class Main {
 
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
-        PriorityQueue<Jewelry> jewelryHeap = new PriorityQueue<>((j1, j2) -> j1.weight == j2.weight ? j1.value - j2.value : j1.weight - j2.weight);
+        PriorityQueue<Jewelry> jewelryHeap = new PriorityQueue<>((j1, j2) -> j1.weight - j2.weight);
 
         for(int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
